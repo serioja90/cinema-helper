@@ -4,7 +4,7 @@
     <listener>
         <description>The worker that will parse news pages and
 will update the information in the database.</description>
-        <listener-class>workers.NewsParsingWorker</listener-class>
+        <listener-class>utilities.ApplicationContextListener</listener-class>
     </listener>
     <session-config>
         <session-timeout>

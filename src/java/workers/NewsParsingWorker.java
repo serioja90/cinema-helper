@@ -1,19 +1,11 @@
 package workers;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import utilities.Logger;
 
-public class NewsParsingWorker implements ServletContextListener {
+public class NewsParsingWorker implements Runnable {
 
   @Override
-  public void contextInitialized(ServletContextEvent sce) {
-    Logger.info("Servlet initialized:");
-  }
-
-  @Override
-  public void contextDestroyed(ServletContextEvent sce) {
-    Logger.info("Servlet destroyed:");
-    Logger.close();
+  public void run() {
+    Logger.info("Going to parse news ...");
   }
 }
