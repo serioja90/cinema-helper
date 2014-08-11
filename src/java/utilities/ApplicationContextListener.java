@@ -24,7 +24,7 @@ public class ApplicationContextListener implements ServletContextListener {
   public void contextInitialized(ServletContextEvent sce) {
     Logger.info("Application started!");
     scheduler = Executors.newSingleThreadScheduledExecutor();
-    scheduler.scheduleAtFixedRate(new NewsParsingWorker(), 0, 5, TimeUnit.SECONDS);
+    scheduler.scheduleAtFixedRate(new NewsParsingWorker(), 0, 300, TimeUnit.SECONDS);
   }
 
   @Override

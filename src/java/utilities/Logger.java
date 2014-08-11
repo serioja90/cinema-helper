@@ -55,23 +55,28 @@ public class Logger {
   }
   
   public static void fatal(String msg){
-    if(logLevel >= FATAL) print(FATAL, msg);
+    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= FATAL) print(FATAL, className, msg);
   }
   
   public static void error(String msg){
-    if(logLevel >= ERROR) print(ERROR, msg);
+    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= ERROR) print(ERROR, className, msg);
   }
   
   public static void warn(String msg){
-    if(logLevel >= WARN) print(WARN, msg);
+    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= WARN) print(WARN, className, msg);
   }
   
   public static void info(String msg){
-    if(logLevel >= INFO) print(INFO, msg);
+    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= INFO) print(INFO, className, msg);
   }
   
   public static void debug(String msg){
-    if(logLevel >= DEBUG) print(DEBUG, msg);
+    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= DEBUG) print(DEBUG, className, msg);
   }
   
   public static synchronized void close(){
@@ -81,8 +86,15 @@ public class Logger {
     }
   }
   
-  protected static synchronized void print(int level, String msg){
-    logFile.append('[' + getTimestamp() + "][" + logLevelNames[level] + "] " + msg + "\n");
+  public static void reportException(Exception e){
+    error(e.getMessage());
+    for (StackTraceElement item : e.getStackTrace()) {
+      error("\t" + item.toString());
+    }
+  }
+  
+  protected static synchronized void print(int level, String className, String msg){
+    logFile.append('[' + getTimestamp() + "][" + logLevelNames[level] + "] " + className + ": " + msg + "\n");
     logFile.flush();
   }
   
