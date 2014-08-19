@@ -9,6 +9,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Date;
 import javax.ejb.Singleton;
+import sun.reflect.Reflection;
 
 @Singleton
 public class Logger {
@@ -55,27 +56,27 @@ public class Logger {
   }
   
   public static void fatal(String msg){
-    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    String className = Reflection.getCallerClass().getSimpleName();
     if(logLevel >= FATAL) print(FATAL, className, msg);
   }
   
   public static void error(String msg){
-    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    String className = Reflection.getCallerClass().getSimpleName();
     if(logLevel >= ERROR) print(ERROR, className, msg);
   }
   
   public static void warn(String msg){
-    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
-    if(logLevel >= WARN) print(WARN, className, msg);
+    String className = Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= WARN) print(WARN, " " + className, msg);
   }
   
   public static void info(String msg){
-    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
-    if(logLevel >= INFO) print(INFO, className, msg);
+    String className = Reflection.getCallerClass().getSimpleName();
+    if(logLevel >= INFO) print(INFO, " " + className, msg);
   }
   
   public static void debug(String msg){
-    String className = sun.reflect.Reflection.getCallerClass().getSimpleName();
+    String className = Reflection.getCallerClass().getSimpleName();
     if(logLevel >= DEBUG) print(DEBUG, className, msg);
   }
   
@@ -87,9 +88,10 @@ public class Logger {
   }
   
   public static void reportException(Exception e){
-    error(e.getMessage());
+    String className = Reflection.getCallerClass().getSimpleName();
+    print(ERROR, className, e.getMessage());
     for (StackTraceElement item : e.getStackTrace()) {
-      error("\t" + item.toString());
+      print(ERROR, className, "\t" + item.toString());
     }
   }
   
