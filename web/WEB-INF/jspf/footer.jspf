@@ -1,9 +1,13 @@
-<%@ page pageEncoding="UTF-8" %>
-<hr>
-<footer>
-  <blockquote>
-    <p>Something useful</p>
-  </blockquote>
-</footer>
-<script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
+    <%@ page pageEncoding="UTF-8" %>
+    <div class="container">
+      <hr>
+      <footer>
+        <blockquote>
+          <p>Something useful</p>
+        </blockquote>
+      </footer>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
