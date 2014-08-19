@@ -8,8 +8,10 @@ package utilities;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import workers.FilmsParsingWorker;
 
 /**
  *
@@ -20,9 +22,16 @@ public class ApplicationContextListener implements ServletContextListener {
   
   @Override
   public void contextInitialized(ServletContextEvent sce) {
+    String filmsParsingInterval = sce.getServletContext().getInitParameter("films-parsing-worker-interval");
     Logger.info("Application started!");
     scheduler = Executors.newSingleThreadScheduledExecutor();
-    //scheduler.scheduleAtFixedRate(new NewsParsingWorker(), 0, 300, TimeUnit.SECONDS);
+    Logger.info("Films will be parsed once every " + filmsParsingInterval + " seconds");
+    scheduler.scheduleAtFixedRate(
+      new FilmsParsingWorker(sce.getServletContext()), 
+      0,
+      filmsParsingInterval == null ? 300 : Integer.parseInt(filmsParsingInterval),
+      TimeUnit.SECONDS
+    );
   }
 
   @Override

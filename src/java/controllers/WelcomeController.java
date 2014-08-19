@@ -29,17 +29,6 @@ public class WelcomeController extends ApplicationController {
    * @param response
    */
   public void index(HttpServletRequest request, HttpServletResponse response){
-    Logger.info("I was here...");
+    request.setAttribute("name", "Sergiu bla bla bla");
   }
-
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo() {
-    return "Short description";
-  }// </editor-fold>
-
 }

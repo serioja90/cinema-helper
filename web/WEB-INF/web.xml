@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <display-name>Cinema Helper</display-name>
+    <context-param>
+        <description>The interval in seconds setted for the worker
+that will parse the particular cinema sites and
+will update database infromation about films.</description>
+        <param-name>films-parsing-worker-interval</param-name>
+        <param-value>300</param-value>
+    </context-param>
     <listener>
         <description>
           A listener that will start/stop a worker that will parse different sites
