@@ -81,6 +81,7 @@ public class DerbyAdapter extends DatabaseAdapter {
   public ResultSet findBySql(String sql, String... args) {
     PreparedStatement statement;
     ResultSet result = null;
+    Logger.debug(sql + " [" + join(args,",") + "]");
     try {
       statement = connection.prepareStatement(sql);
       for(int i=0; i < args.length; i++){

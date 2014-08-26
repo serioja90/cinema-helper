@@ -11,3 +11,15 @@ CREATE TABLE users (
   name VARCHAR(255) NOT NULL,
   role_id INT NOT NULL
 );
+
+CREATE TABLE film (
+  id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,
+  title VARCHAR (255) NOT NULL,
+  tecnology VARCHAR(2) NOT NULL,
+  duration VARCHAR(10) NOT NULL,
+  image VARCHAR(512) NOT NULL,
+  link VARCHAR(512) NOT NULL,
+  description TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX film_title_tecnology ON film(title,tecnology);

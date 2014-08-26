@@ -31,7 +31,6 @@ public class WelcomeController extends ApplicationController {
    * @param response
    */
   public void index(HttpServletRequest request, HttpServletResponse response){
-    Role role = (Role)new Role().find(1);
-    request.setAttribute("name", "Sergiu bla bla bla" + role.get("name"));
+    request.setAttribute("name", "Ciao");
   }
 }
