@@ -22,6 +22,7 @@ public class ApplicationContextListener implements ServletContextListener {
   
   @Override
   public void contextInitialized(ServletContextEvent sce) {
+    Logger.setLogLevel(Logger.DEBUG);
     String filmsParsingInterval = sce.getServletContext().getInitParameter("films-parsing-worker-interval");
     Logger.info("Application started!");
     scheduler = Executors.newSingleThreadScheduledExecutor();

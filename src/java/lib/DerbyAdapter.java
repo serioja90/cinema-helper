@@ -8,7 +8,6 @@ package lib;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import utilities.Logger;
 
@@ -17,40 +16,25 @@ import utilities.Logger;
  * @author sergiu
  */
 public class DerbyAdapter implements DatabaseAdapter {
-  private Connection connection;
-  private static final String DRIVER_NAME = "org.apache.derby.jdbc.EmbeddedDriver";
-  private static final String CONNECTION_PREFIX = "jdbc:derby:";
-  
-  static {
+  private Connection connection = null;
+  private final String DRIVER_NAME = "org.apache.derby.jdbc.EmbeddedDriver";
+  private final String CONNECTION_PREFIX = "jdbc:derby:";
+ 
+  public DerbyAdapter(String database){
     try {
       Class.forName(DRIVER_NAME);
+      Logger.info("Opening new connection to '" + CONNECTION_PREFIX + database + "'");
+      connection = DriverManager.getConnection(CONNECTION_PREFIX + database);
+    } catch (SQLException ex) {
+      Logger.warn("Database not found!");
+      connection = create(database);
     } catch (ClassNotFoundException ex) {
       Logger.reportException(ex);
     }
   }
   
-  public DerbyAdapter(String database){
-    try {
-      connection = DriverManager.getConnection(CONNECTION_PREFIX + database);
-    } catch (SQLException ex) {
-      connection = create(database);
-    }
-  }
-  
   @Override
-  public Connection getConnection() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public ResultSet select(String fields, String from, String where, String... args) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void execute(String sql, String... args) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+  public Connection getConnection() { return this.connection; }
   
   private Connection create(String database){
     Connection conn = null;
@@ -70,7 +54,7 @@ public class DerbyAdapter implements DatabaseAdapter {
     }
   }
   
-  public static void shutdown(String database) throws SQLException{
+  public void shutdown(String database) throws SQLException{
     DriverManager.getConnection(CONNECTION_PREFIX + database + ";shutdown=true");
   }
 }

@@ -72,11 +72,13 @@ public class Query {
   
   public ResultSet execute() throws SQLException{
     statement = connection.prepareStatement(this.toString());
-    for(int i=0; i<params.size(); i++){
-      statement.setString(i, params.get(i));
+    for(int i=0; i < params.size(); i++){
+      statement.setString(i + 1, params.get(i));
     }
     return statement.executeQuery();
   }
+  
+  public ArrayList<String> getParams(){ return this.params; }
   
   @Override
   public String toString(){
@@ -96,7 +98,7 @@ public class Query {
     boolean isFirst = true;
     String result = "";
     if(args != null ){
-      result = (prefix == null ? "" : prefix);
+      result = (prefix == null || args.isEmpty() ? "" : prefix);
       for(String arg : args){
         result += (isFirst ? "" : joinChar) + arg;
       }

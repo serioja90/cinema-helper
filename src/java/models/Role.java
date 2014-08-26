@@ -4,14 +4,20 @@
  * and open the template in the editor.
  */
 
-package lib;
+package models;
 
-import java.sql.Connection;
+import lib.Model;
+import utilities.Logger;
 
 /**
  *
  * @author sergiu
  */
-public interface DatabaseAdapter {
-  public Connection getConnection();
+public class Role extends Model{
+
+  public Role(){
+    super();
+    tableName = "roles";
+    id = "id";
+  }
 }

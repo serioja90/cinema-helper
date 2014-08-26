@@ -75,7 +75,7 @@ public class ApplicationController extends HttpServlet {
     }catch(ServletException ex){
       Logger.reportException(ex);
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }catch( SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex){
+    }catch(Exception ex){
       Logger.reportException(ex);
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
