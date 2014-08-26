@@ -8,7 +8,7 @@ package lib;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import javax.servlet.ServletContext;
+import utilities.ApplicationContextListener;
 import utilities.Logger;
 
 /**
@@ -25,17 +27,32 @@ import utilities.Logger;
 public abstract class Model {
   protected String tableName;
   protected String id;
-  private DatabaseAdapter adapter;
-  private Connection connection;
+  private DatabaseConnection connection;
   protected Map<String,String> properties;
   
   public Model(){
     properties = new HashMap<>();
-    adapter = new DerbyAdapter("//localhost:1527/test");
-    connection = adapter.getConnection();
   }
   
-  public Model parseResult(ResultSet result){
+  public Model connect(){
+    if(connection != null) return this;
+    ServletContext context = ApplicationContextListener.getServletContext();
+    Map<String,String> config = new HashMap<>();
+    config.put("host", context.getInitParameter("dbhost"));
+    config.put("port", context.getInitParameter("dbport"));
+    config.put("database", context.getInitParameter("dbname"));
+    config.put("adapter", context.getInitParameter("dbadapter"));
+    config.put("user", context.getInitParameter("dbuser"));
+    config.put("password", context.getInitParameter("dbpasword"));
+    try {
+      connection = new DatabaseConnection(config);
+    } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+      Logger.reportException(ex);
+    }
+    return this;
+  }
+  
+  public Model populate(ResultSet result){
     if(result != null){
       ResultSetMetaData meta; 
       String label;
@@ -53,16 +70,37 @@ public abstract class Model {
     return this;
   }
   
-  public ArrayList<Model> find(String idValue){
-    Query query = new Query(connection);
+  public Model find(Object idValue){
+    connect();
+    Map<String,String[]> params = new HashMap<>();
+    ArrayList<Model> result;
+    params.put("select", new String[]{"*"});
+    params.put("from", new String[]{tableName});
+    params.put("where", new String[]{id + " = ?"});
+    params.put("params", new String[]{idValue.toString()});
+    result = parseResultSet(connection.find(params));    
+    return result.isEmpty() ? null : result.get(0);
+  }
+  
+  public ArrayList<Model> findBySql(String sql, String... args){
+    connect();
+    Logger.debug(sql);
+    return parseResultSet(connection.findBySql(sql, args));
+  }
+    
+  public ArrayList<Model> all(){
+    connect();
+    Map<String,String[]> params = new HashMap<>();
+    ArrayList<Model> result;
+    return parseResultSet(connection.find(params));
+  }
+  
+  public ArrayList<Model> parseResultSet(ResultSet rs){
     ArrayList<Model> result = new ArrayList<>();
     try {
-      query.select("*").from(tableName).where(id + " = ?", idValue);
-      Logger.debug(query.toString());
-      ResultSet rs = query.execute();
       Constructor<Model> constr = (Constructor<Model>) this.getClass().getConstructor();
       while(rs.next()){
-        result.add(constr.newInstance().parseResult(rs));
+        result.add(constr.newInstance().populate(rs));
       }
     } catch (IllegalAccessException | IllegalArgumentException | 
              InstantiationException | NoSuchMethodException | SecurityException | 

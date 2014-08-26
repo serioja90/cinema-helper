@@ -8,6 +8,26 @@ will update database infromation about films.</description>
         <param-name>films-parsing-worker-interval</param-name>
         <param-value>300</param-value>
     </context-param>
+    <context-param>
+        <description>Database host</description>
+        <param-name>dbhost</param-name>
+        <param-value>//localhost</param-value>
+    </context-param>
+    <context-param>
+        <description>Database port</description>
+        <param-name>dbport</param-name>
+        <param-value>1527</param-value>
+    </context-param>
+    <context-param>
+        <description>Database name</description>
+        <param-name>dbname</param-name>
+        <param-value>test</param-value>
+    </context-param>
+    <context-param>
+        <description>Database adapter class name</description>
+        <param-name>dbadapter</param-name>
+        <param-value>lib.DerbyAdapter</param-value>
+    </context-param>
     <listener>
         <description>
           A listener that will start/stop a worker that will parse different sites

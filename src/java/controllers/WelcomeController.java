@@ -29,10 +29,9 @@ public class WelcomeController extends ApplicationController {
    *
    * @param request
    * @param response
-   * @throws java.lang.Exception
    */
-  public void index(HttpServletRequest request, HttpServletResponse response) throws Exception{
-    ArrayList<Model> roles = new Role().find("1");
-    request.setAttribute("name", "Sergiu bla bla bla" + roles.get(0).get("name"));
+  public void index(HttpServletRequest request, HttpServletResponse response){
+    Role role = (Role)new Role().find(1);
+    request.setAttribute("name", "Sergiu bla bla bla" + role.get("name"));
   }
 }

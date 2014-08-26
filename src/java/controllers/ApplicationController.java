@@ -68,16 +68,15 @@ public class ApplicationController extends HttpServlet {
         method.invoke(this, request, response);
       }catch(NoSuchMethodException ex){
         Logger.warn(controller + "#" + action + " not found!");
-      }finally{
-        Logger.info("Responding with " + path);
-        request.getRequestDispatcher(path).forward(request, response);
       }
+      Logger.info("Responding with " + path);
+      request.getRequestDispatcher(path).forward(request, response);
     }catch(ServletException ex){
       Logger.reportException(ex);
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-    }catch(Exception ex){
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.toString());
+    }catch(SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException ex){
       Logger.reportException(ex);
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.toString());
     }
   }
 

@@ -12,11 +12,10 @@ import lib.Model;
  *
  * @author sergiu
  */
-public class Role extends Model{
-
-  public Role(){
+public class User extends Model{
+  public User(){
     super();
-    tableName = "roles";
+    tableName = "users";
     id = "id";
   }
 }

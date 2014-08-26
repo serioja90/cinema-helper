@@ -89,7 +89,7 @@ public class Logger {
   
   public static void reportException(Exception e){
     String className = Reflection.getCallerClass().getSimpleName();
-    print(ERROR, className, e.getMessage());
+    print(ERROR, className, e.toString());
     for (StackTraceElement item : e.getStackTrace()) {
       print(ERROR, className, "\t" + item.toString());
     }
@@ -116,7 +116,7 @@ public class Logger {
     Date now = new Date();
     String timestamp = (new Timestamp(now.getTime())).toString();
     String nano = timestamp.split("\\.")[1];
-    if(nano.length() < 3) timestamp += "0";
+    for(int i = nano.length(); i < 3; i++){ timestamp += "0"; }
     return timestamp;
   }
   

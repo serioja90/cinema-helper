@@ -7,11 +7,59 @@
 package lib;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Map;
+import utilities.Logger;
 
 /**
  *
  * @author sergiu
  */
-public interface DatabaseAdapter {
-  public Connection getConnection();
+public abstract class DatabaseAdapter {
+  protected String driverName, connectionPrefix, host, port, database, user, password;
+  protected Connection connection;
+  public DatabaseAdapter(String driverName, String connectionPrefix, String host,
+                         String port, String database, String user, String password
+                        ) throws ClassNotFoundException{
+    this.driverName = driverName;
+    this.connectionPrefix = connectionPrefix;
+    this.host = host;
+    this.port = port;
+    this.database = database;
+    this.user = user;
+    this.password = password;
+    Class.forName(driverName);
+  }
+  
+  public Connection getConnection(){ return this.connection; }
+  
+  protected Connection connect() throws SQLException{
+    Connection conn;
+    Logger.info("Connecting to " + getConnectionUrl());
+    if(user != null){
+      conn = DriverManager.getConnection(getConnectionUrl(), user, password);
+    }else{
+      conn = DriverManager.getConnection(getConnectionUrl());
+    }
+    return conn;
+  }
+  
+  protected String join(String[] args, String joinChar){
+    String result = "";
+    boolean isFirst = true;
+    if(args == null) return result;
+    for(String arg : args){
+      result += (isFirst ? "" : joinChar) + arg;
+      if(isFirst) isFirst = false;
+    }
+    return result;
+  }
+  
+  public abstract ResultSet find(Map<String,String[]> params);
+  public abstract ResultSet findBySql(String sql, String... args);
+  public abstract boolean execute(String sql, String... args);
+  public abstract String getConnectionUrl();
 }
