@@ -22,7 +22,7 @@ public class FilmsParsingWorker implements Runnable {
   @Override
   public void run() {
     Logger.info("Going to parse films data ...");
-    new Thread(new ImgCinemasParser()).start();
+    //new Thread(new ImgCinemasParser()).start();
   }
   
 }

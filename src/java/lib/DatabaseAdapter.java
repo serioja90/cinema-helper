@@ -10,9 +10,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 import utilities.Logger;
+import utilities.Tools;
 
 /**
  *
@@ -48,14 +48,7 @@ public abstract class DatabaseAdapter {
   }
   
   protected String join(String[] args, String joinChar){
-    String result = "";
-    boolean isFirst = true;
-    if(args == null) return result;
-    for(String arg : args){
-      result += (isFirst ? "" : joinChar) + arg;
-      if(isFirst) isFirst = false;
-    }
-    return result;
+    return Tools.join(args,joinChar);
   }
   
   public abstract ResultSet find(Map<String,String[]> params);

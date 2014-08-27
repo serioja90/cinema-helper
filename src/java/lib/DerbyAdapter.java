@@ -11,7 +11,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 import utilities.Logger;
 
@@ -84,8 +83,10 @@ public class DerbyAdapter extends DatabaseAdapter {
     Logger.debug(sql + " [" + join(args,",") + "]");
     try {
       statement = connection.prepareStatement(sql);
-      for(int i=0; i < args.length; i++){
-        statement.setString(i + 1, args[i]);
+      if(args != null){
+        for(int i=0; i < args.length; i++){
+          statement.setString(i + 1, args[i]);
+        }
       }
       result = statement.executeQuery();
     } catch (SQLException ex) {
@@ -96,7 +97,19 @@ public class DerbyAdapter extends DatabaseAdapter {
 
   @Override
   public boolean execute(String sql, String... args) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    PreparedStatement statement;
+    boolean result = false;
+    Logger.debug(sql + " [" + join(args,",") + "]");
+    try {
+      statement = connection.prepareStatement(sql);
+      for(int i=0; i < args.length; i++){
+        statement.setString(i + 1, args[i]);
+      }
+      result = statement.execute();
+    } catch (SQLException ex) {
+      Logger.reportException(ex);
+    }
+    return result;
   }
 
   @Override

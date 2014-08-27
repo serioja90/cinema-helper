@@ -6,12 +6,11 @@
 
 package controllers;
 
-import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lib.Model;
-import models.Role;
+import models.Film;
+import utilities.Logger;
 
 /**
  *
@@ -31,6 +30,11 @@ public class WelcomeController extends ApplicationController {
    * @param response
    */
   public void index(HttpServletRequest request, HttpServletResponse response){
-    request.setAttribute("name", "Ciao");
+    try{
+      request.setAttribute("films", Film.getFilmsList());
+      request.setAttribute("name", "Ciao");
+    }catch(Exception ex){
+      Logger.reportException(ex);
+    }
   }
 }

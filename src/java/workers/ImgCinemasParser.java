@@ -7,6 +7,10 @@
 package workers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import models.Film;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,26 +27,28 @@ public class ImgCinemasParser implements Runnable{
 
   @Override
   public void run() {
+    ArrayList<Film> films = new ArrayList<>();
     try {
       document = Jsoup.connect(URL).get();
       //Elements elements = document.select("div.flip-container.evidence");
       Elements elements = document.select("div#filmList .filmTeaserBox");
       for(Element el : elements){
-        Logger.debug("Title: " + getTitle(el));
-        Logger.debug("Image: " + getImg(el));
-        Logger.debug("Tecnology: " + getTecnology(el));
-        Logger.debug("Duration: " + getDuration(el));
-        Logger.debug("Link: " + getLink(el) + " " + getLink(el).length());
-        Logger.debug("Description: " + getDescription(el));
+        films.add(Film.create(getData(el)));
       }
     } catch (IOException ex) {
       Logger.reportException(ex);
     }
   }
   
-  private void getData(Element element){
-    
-    
+  private Map<String,String> getData(Element element){
+    Map<String,String> data = new HashMap<>();
+    data.put("title", getTitle(element));
+    data.put("tecnology", getTecnology(element));
+    data.put("duration", getDuration(element));
+    data.put("image", getImg(element));
+    data.put("link", getLink(element));
+    data.put("description", getDescription(element));
+    return data;
   }
   
   private String getTitle(Element element){

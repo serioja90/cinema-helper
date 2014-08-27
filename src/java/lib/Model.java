@@ -8,17 +8,18 @@ package lib;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.servlet.ServletContext;
 import utilities.ApplicationContextListener;
 import utilities.Logger;
+import utilities.Tools;
 
 /**
  *
@@ -91,8 +92,21 @@ public abstract class Model {
   public ArrayList<Model> all(){
     connect();
     Map<String,String[]> params = new HashMap<>();
-    ArrayList<Model> result;
+    params.put("select", new String[]{"*"});
+    params.put("from", new String[]{tableName});
     return parseResultSet(connection.find(params));
+  }
+  
+  public boolean save(){
+    if(properties.isEmpty()) return true;
+    connect();
+    String[] columns = new String[]{};
+    String[] values = new String[]{};
+    columns = properties.keySet().toArray(columns);
+    values = properties.values().toArray(values);
+    String query = "INSERT INTO " + tableName + " (" + join(columns,",") + ")";
+    query += " VALUES(" + join(Tools.space("?", properties.size()),",") + ")";
+    return connection.execute(query, values);
   }
   
   public ArrayList<Model> parseResultSet(ResultSet rs){
@@ -118,4 +132,8 @@ public abstract class Model {
   
   public String getTableName(){ return tableName; }
   public String getId(){ return id; }
+  
+  protected String join(String[] args, String joinChar){
+    return Tools.join(args, joinChar);
+  }
 }

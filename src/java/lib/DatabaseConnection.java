@@ -9,7 +9,6 @@ package lib;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -37,5 +36,5 @@ public class DatabaseConnection {
   
   public ResultSet find(Map<String,String[]> params){ return adapter.find(params); }
   public ResultSet findBySql(String sql, String... args){ return adapter.findBySql(sql, args); }
-  public boolean execute(String sql, String... args){ return false; }
+  public boolean execute(String sql, String... args){ return adapter.execute(sql, args); }
 }

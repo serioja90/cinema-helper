@@ -91,12 +91,14 @@ public class Logger {
     String className = Reflection.getCallerClass().getSimpleName();
     print(ERROR, className, e.toString());
     for (StackTraceElement item : e.getStackTrace()) {
-      print(ERROR, className, "\t" + item.toString());
+      print(ERROR, null, "\t" + item.toString());
     }
   }
   
   protected static synchronized void print(int level, String className, String msg){
-    logFile.append('[' + getTimestamp() + "][" + logLevelNames[level] + "] " + className + ": " + msg + "\n");
+    logFile.append('[' + getTimestamp() + "][" + logLevelNames[level] + "] " + 
+      (className == null ? "" : className + ": ") + msg + "\n"
+    );
     logFile.flush();
   }
   

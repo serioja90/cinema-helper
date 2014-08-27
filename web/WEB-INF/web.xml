@@ -21,7 +21,7 @@ will update database infromation about films.</description>
     <context-param>
         <description>Database name</description>
         <param-name>dbname</param-name>
-        <param-value>test</param-value>
+        <param-value>cinema-helper</param-value>
     </context-param>
     <context-param>
         <description>Database adapter class name</description>
