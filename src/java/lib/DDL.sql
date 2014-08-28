@@ -31,3 +31,9 @@ CREATE TABLE films (
 );
 
 CREATE UNIQUE INDEX film_title_tecnology ON films(title,tecnology);
+
+CREATE TABLE schedule (
+  id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,
+  film_id INTEGER NOT NULL,
+  schedule TIMESTAMP NOT NULL
+);

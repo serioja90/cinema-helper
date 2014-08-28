@@ -6,6 +6,10 @@
 
 package workers;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 import javax.servlet.ServletContext;
 import utilities.Logger;
 
@@ -22,7 +26,7 @@ public class FilmsParsingWorker implements Runnable {
   @Override
   public void run() {
     Logger.info("Going to parse films data ...");
-    new Thread(new ImgCinemasParser()).start();
+    //new Thread(new ImgCinemasParser()).start();
   }
   
 }

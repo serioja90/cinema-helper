@@ -68,12 +68,32 @@ public class Film extends Model{
   }
   
   public static Film[] getFilmsByGenre(String genre){
-    Film[] films = new Film[]{};
     Map<String,String[]> params = new HashMap<>();
     params.put("select", new String[]{"*"});
     params.put("where", new String[]{"genre = ?"});
     params.put("params", new String[]{genre});
-    films = new Film().find(params).toArray(films);
-    return films;
+    return new Film().find(params).toArray(new Film[]{});
+  }
+  
+  public static Film[] search(String query){
+    Map<String,String[]> params = new HashMap<>();
+    params.put("select", new String[]{"*"});
+    params.put("where", new String[]{"lower(title) LIKE ?"});
+    params.put("params", new String[]{"%" + query.toLowerCase() + "%"});
+    return new Film().find(params).toArray(new Film[]{});
+  }
+  
+  public Schedule[] setCalendar(String[] data){
+    ArrayList<Schedule> result = new ArrayList<>();
+    String filmId = this.get(id);
+    Schedule.clear(filmId);
+    for(String item : data){
+      result.add(Schedule.create(filmId, item));
+    }
+    return result.toArray(new Schedule[]{});
+  }
+  
+  public Schedule[] getCalendar(){
+    return Schedule.getByFilmId(this.get(id));
   }
 }

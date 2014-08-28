@@ -6,7 +6,7 @@
 that will parse the particular cinema sites and
 will update database infromation about films.</description>
         <param-name>films-parsing-worker-interval</param-name>
-        <param-value>300</param-value>
+        <param-value>3600</param-value>
     </context-param>
     <context-param>
         <description>Database host</description>

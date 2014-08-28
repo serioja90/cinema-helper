@@ -121,6 +121,11 @@ public abstract class Model {
     return connection.execute(query, values);
   }
   
+  public boolean execute(String sql, String... args){
+    connect();
+    return connection.execute(sql, args);
+  }
+  
   public ArrayList<Model> parseResultSet(ResultSet rs){
     ArrayList<Model> result = new ArrayList<>();
     try {

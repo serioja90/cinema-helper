@@ -7,8 +7,13 @@
 package workers;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import models.Film;
 import org.jsoup.Jsoup;
@@ -27,6 +32,7 @@ public class ImgCinemasParser implements Runnable{
   @Override
   public void run() {
     try{
+      Object[] items;
       ArrayList<Film> films = new ArrayList<>();
       Document document = getDocument(URL);
       if(document != null){
@@ -34,13 +40,15 @@ public class ImgCinemasParser implements Runnable{
         Map<String,String> data = null;
         Film film = null;
         for(Element el : elements){
-          data = getData(el);
+          items = getData(el);
+          data = (Map<String,String>)items[0];
           film = Film.find(data.get("title"), data.get("tecnology"));
           if(film != null){
             films.add(film.update(data));
           }else{
-            films.add(Film.create(getData(el)));
+            films.add(Film.create(data));
           }
+          if(film != null) film.setCalendar((String[])items[1]);
         }
       }
       Logger.info("IMG Cinemas site successfully parsed!");
@@ -61,7 +69,9 @@ public class ImgCinemasParser implements Runnable{
     return document;
   }
   
-  private Map<String,String> getData(Element element){
+  private Object[] getData(Element element){
+    Object[] result = new Object[2];
+    String[] prog = new String[]{};
     Map<String,String> data = new HashMap<>();
     data.put("title", getTitle(element));
     data.put("tecnology", getTecnology(element));
@@ -69,6 +79,7 @@ public class ImgCinemasParser implements Runnable{
     data.put("image", getImg(element));
     data.put("link", getLink(element));
     data.put("description", getDescription(element));
+    data.put("origin", "IMG Cinemas");
     Document document = getDocument(data.get("link"));
     if(document != null){
       data.put("genre", getGenre(document));
@@ -77,9 +88,11 @@ public class ImgCinemasParser implements Runnable{
       data.put("director", getDirector(document));
       data.put("film_cast", getCast(document));
       data.put("official_site", getOfficialSite(document));
+      prog = getCalendar(document);
     }
-    data.put("origin", "IMG Cinemas");
-    return data;
+    result[0] = data;
+    result[1] = prog;
+    return result;
   }
   
   private String getTitle(Element element){
@@ -169,5 +182,44 @@ public class ImgCinemasParser implements Runnable{
     Element e = document.select("div#scheda .filmDescription p:contains(Sito) span").first();
     if(e != null) officialSite = e.text();
     return officialSite;
+  }
+  
+  private String[] getCalendar(Document document){
+    String day;
+    Date date;
+    ArrayList<String> days = new ArrayList<>();
+    Calendar now = Calendar.getInstance();
+    SimpleDateFormat parser = new SimpleDateFormat("EEEEEEEEE dd MMMMMMMM yyyy", Locale.ITALY);
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    Elements elements = document.select("div#scheda ul.filmProgCalendar li");
+    for(Element e : elements){
+      day = getDay(e);
+      try {
+        day = formatter.format(parser.parse(day + " " + now.get(Calendar.YEAR)));
+      } catch (ParseException ex) {
+        Logger.reportException(ex);
+      }
+      for(String prog : getDayProg(e)){
+        days.add(day + " " + prog + ":00");
+        Logger.debug("PROG: " + day + " " + prog + ":00");
+      }
+    }
+    return days.toArray(new String[]{});
+  }
+  
+  private String getDay(Element element){
+    String day = null;
+    Element e = element.select("span.filmProgDay .titleDay").first();
+    if(e != null) day = e.text();
+    return day;
+  }
+  
+  private String[] getDayProg(Element element){
+    ArrayList<String> hours = new ArrayList<>();
+    Elements elements = element.select("span.filmProgDay a.linkHour");
+    for(Element e : elements){
+      hours.add(e.text());
+    }
+    return hours.toArray(new String[]{});
   }
 }
