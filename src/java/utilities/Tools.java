@@ -6,6 +6,11 @@
 
 package utilities;
 
+import java.net.URL;
+import java.sql.Timestamp;
+import java.util.Date;
+import static utilities.Logger.WEBINF;
+
 /**
  *
  * @author sergiu
@@ -26,5 +31,22 @@ public final class Tools {
     String[] result = new String[length];
     for(int i=0; i < length; i++) result[i] = chr + "";
     return result;
+  }
+  
+  public static String getTimestamp(){
+    Date now = new Date();
+    String timestamp = (new Timestamp(now.getTime())).toString();
+    String nano = timestamp.split("\\.")[1];
+    for(int i = nano.length(); i < 3; i++){ timestamp += "0"; }
+    return timestamp;
+  }
+  
+  public static String now(){ return getTimestamp(); }
+  
+  public static String getWebInfPath(){
+    URL url = Logger.class.getResource("Logger.class");
+    String className = url.getFile();
+    String filePath = className.substring(0,className.indexOf(WEBINF) + WEBINF.length());
+    return filePath;
   }
 }

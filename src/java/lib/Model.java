@@ -12,9 +12,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import utilities.ApplicationContextListener;
@@ -28,11 +27,13 @@ import utilities.Tools;
 public abstract class Model {
   protected String tableName;
   protected String id;
+  protected boolean loaded;
   private DatabaseConnection connection;
   protected Map<String,String> properties;
   
   public Model(){
     properties = new HashMap<>();
+    loaded = false;
   }
   
   public Model connect(){
@@ -64,6 +65,7 @@ public abstract class Model {
           Logger.debug(label + ": " + result.getString(label));
           properties.put(label.toLowerCase(), result.getString(label));
         }
+        loaded = true;
       } catch (SQLException ex) {
         Logger.reportException(ex);
       }
@@ -83,9 +85,14 @@ public abstract class Model {
     return result.isEmpty() ? null : result.get(0);
   }
   
+  public ArrayList<Model> find(Map<String,String[]> params){
+    connect();
+    if(params.get("from") == null) params.put("from", new String[]{tableName});
+    return parseResultSet(connection.find(params));
+  }
+  
   public ArrayList<Model> findBySql(String sql, String... args){
     connect();
-    Logger.debug(sql);
     return parseResultSet(connection.findBySql(sql, args));
   }
     
@@ -99,7 +106,12 @@ public abstract class Model {
   
   public boolean save(){
     if(properties.isEmpty()) return true;
-    connect();
+    if(loaded) return update();
+    connect();    
+    if(properties.get(id) != null){
+      Model model = find(properties.get(id));
+      if(model != null) return update();
+    }
     String[] columns = new String[]{};
     String[] values = new String[]{};
     columns = properties.keySet().toArray(columns);
@@ -124,7 +136,10 @@ public abstract class Model {
     return result;
   }
   
-  public String get(String field){ return properties.get(field); }
+  public String get(String field){ 
+    return properties.get(field); 
+  }
+  
   public Model set(String field, String value){ 
     properties.put(field, value);
     return this;
@@ -133,7 +148,38 @@ public abstract class Model {
   public String getTableName(){ return tableName; }
   public String getId(){ return id; }
   
+  public Model setProperties(Map<String,String> params){
+    Iterator<Map.Entry<String,String>> it = params.entrySet().iterator();
+    Map.Entry<String,String> el; 
+    while(it.hasNext()){
+      el = it.next();
+      this.set(el.getKey(), el.getValue());
+    }
+    return this;
+  }
+  
   protected String join(String[] args, String joinChar){
     return Tools.join(args, joinChar);
+  }
+  
+  private boolean update(){
+    if(properties.isEmpty()) return true;
+    if(properties.get(id) == null) return false;
+    connect();
+    String[] columns = new String[]{};
+    String[] values = new String[]{};
+    ArrayList<String> v = new ArrayList<>();
+    String idValue = properties.remove(id);
+    columns = properties.keySet().toArray(columns);
+    if(columns.length == 0) return false;
+    String query = "UPDATE " + tableName + " SET " + join(columns, " = ?, ") + " = ? ";
+    query += "WHERE " + id + " = ?";
+    for(String val : properties.values()){
+      v.add(val);
+    }
+    v.add(idValue);
+    values = v.toArray(values);
+    properties.put(id, idValue);
+    return connection.execute(query, values);
   }
 }

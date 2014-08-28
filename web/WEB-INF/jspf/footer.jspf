@@ -1,10 +1,16 @@
     <%@ page pageEncoding="UTF-8" %>
-    <div class="container">
+    <div>
       <hr>
-      <footer>
-        <blockquote>
-          <p>Something useful</p>
-        </blockquote>
+      <footer class="container">
+        <p>
+          Progettato e sviluppato da <span class="text-info">Groza Sergiu</span>.
+        </p>
+        <p>
+          Potenziato dai progetti Open Source 
+          <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>,
+          <a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font Awesome</a>,
+          <a href="http://jsoup.org/" target="_blank">Jsoup</a>
+        </p>
       </footer>
     </div>
     <script src="<%= request.getContextPath() %>/js/jquery.min.js"></script>

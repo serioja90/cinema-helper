@@ -6,6 +6,7 @@
 
 package lib;
 
+import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -80,12 +81,17 @@ public class DerbyAdapter extends DatabaseAdapter {
   public ResultSet findBySql(String sql, String... args) {
     PreparedStatement statement;
     ResultSet result = null;
-    Logger.debug(sql + " [" + join(args,",") + "]");
+    Gson json = new Gson();
+    Logger.debug(sql + "; " + json.toJson(args));
     try {
       statement = connection.prepareStatement(sql);
       if(args != null){
         for(int i=0; i < args.length; i++){
-          statement.setString(i + 1, args[i]);
+          if(args[i] == null){
+            statement.setNull(i + 1, java.sql.Types.NULL);
+          }else{
+            statement.setString(i + 1, args[i]);
+          }
         }
       }
       result = statement.executeQuery();
@@ -99,7 +105,8 @@ public class DerbyAdapter extends DatabaseAdapter {
   public boolean execute(String sql, String... args) {
     PreparedStatement statement;
     boolean result = false;
-    Logger.debug(sql + " [" + join(args,",") + "]");
+    Gson json = new Gson();
+    Logger.debug(sql + "; " + json.toJson(args));
     try {
       statement = connection.prepareStatement(sql);
       for(int i=0; i < args.length; i++){

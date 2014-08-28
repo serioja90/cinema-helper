@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.ejb.Singleton;
 import sun.reflect.Reflection;
 
@@ -25,7 +23,7 @@ public class Logger {
   protected static int logLevel = INFO;
   
   static {
-    logFilename = getWebInfPath() + "/log/application.log";
+    logFilename = Tools.getWebInfPath() + "/log/application.log";
     init();
   }
   
@@ -96,7 +94,7 @@ public class Logger {
   }
   
   protected static synchronized void print(int level, String className, String msg){
-    logFile.append('[' + getTimestamp() + "][" + logLevelNames[level] + "] " + 
+    logFile.append('[' + Tools.getTimestamp() + "][" + logLevelNames[level] + "] " + 
       (className == null ? "" : className + ": ") + msg + "\n"
     );
     logFile.flush();
@@ -112,20 +110,5 @@ public class Logger {
         System.out.println(e.getMessage());
       }
     }
-  }
-  
-  protected static String getTimestamp(){
-    Date now = new Date();
-    String timestamp = (new Timestamp(now.getTime())).toString();
-    String nano = timestamp.split("\\.")[1];
-    for(int i = nano.length(); i < 3; i++){ timestamp += "0"; }
-    return timestamp;
-  }
-  
-  protected static String getWebInfPath(){
-    URL url = Logger.class.getResource("Logger.class");
-    String className = url.getFile();
-    String filePath = className.substring(0,className.indexOf(WEBINF) + WEBINF.length());
-    return filePath;
   }
 }

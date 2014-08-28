@@ -1,1 +1,1 @@
-<% response.sendRedirect("welcome/index"); %>
+<% response.sendRedirect("films/index"); %>

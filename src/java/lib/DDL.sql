@@ -15,11 +15,19 @@ CREATE TABLE users (
 CREATE TABLE films (
   id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,
   title VARCHAR (255) NOT NULL,
-  tecnology VARCHAR(2) NOT NULL,
+  tecnology VARCHAR(50) NOT NULL,
   duration VARCHAR(10) NOT NULL,
   image VARCHAR(512) NOT NULL,
   link VARCHAR(512) NOT NULL,
-  description LONG VARCHAR NOT NULL
+  description LONG VARCHAR NOT NULL,
+  genre VARCHAR(255),
+  nation VARCHAR(255),
+  release_year VARCHAR(4),
+  origin VARCHAR(255),
+  director VARCHAR(255),
+  film_cast LONG VARCHAR,
+  official_site VARCHAR(512),
+  updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE UNIQUE INDEX film_title_tecnology ON films(title,tecnology);

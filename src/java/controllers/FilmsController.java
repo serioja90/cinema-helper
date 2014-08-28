@@ -16,13 +16,13 @@ import utilities.Logger;
  *
  * @author sergiu
  */
-@WebServlet(name = "WelcomeController", 
+@WebServlet(name = "FilmsController", 
             urlPatterns = {
-                            "/welcome",
-                            "/welcome/index",
-                            "/welcome/hello"
+                            "/films",
+                            "/films/index",
+                            "/films/hello"
                           })
-public class WelcomeController extends ApplicationController {
+public class FilmsController extends ApplicationController {
   
   /**
    *
@@ -32,7 +32,6 @@ public class WelcomeController extends ApplicationController {
   public void index(HttpServletRequest request, HttpServletResponse response){
     try{
       request.setAttribute("films", Film.getFilmsList());
-      request.setAttribute("name", "Ciao");
     }catch(Exception ex){
       Logger.reportException(ex);
     }

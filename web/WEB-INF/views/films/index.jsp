@@ -1,9 +1,10 @@
+<%@ page pageEncoding="UTF-8" %>
 <%@page import="models.Film"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="container">
   <div class="page-header">
     <div class="row">
-      <h1 class="col-lg-12">Welcome#index (<%= request.getAttribute("name") %>)</h1>
+      <h1 class="col-lg-12">Elenco Film</h1>
     </div>
   </div>
   <% Film[] films = (Film[])request.getAttribute("films"); %>
@@ -21,7 +22,22 @@
               <img class="media-object img-thumbnail" src="<%= film.get("image") %>" alt="<%= film.get("title") %>" style="max-height: 300px;">
             </a>
             <div class="media-body">
+              <% if(film.get("genre") != null){ %>
+                <p><strong>Genere: </strong> <%= film.get("genre") %></p>
+              <% } %>
               <p><strong>Durata: </strong> <%= film.get("duration") %></p>
+              <% if(film.get("nation") != null){ %>
+                <p><strong>Nazione: </strong> <%= film.get("nation") %></p>
+              <% } %>
+              <% if(film.get("release_year") != null){ %>
+                <p><strong>Anno: </strong> <%= film.get("release_year") %></p>
+              <% } %>
+              <% if(film.get("director") != null){ %>
+                <p><strong>Regia di: </strong> <%= film.get("director") %></p>
+              <% } %>
+              <% if(film.get("film_cast") != null){ %>
+                <p><strong>Cast: </strong> <%= film.get("film_cast") %></p>
+              <% } %>
               <p>
                 <strong>Descrizione: </strong><br>
                 <%= film.get("description") %>

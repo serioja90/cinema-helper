@@ -1,3 +1,4 @@
+<%@page import="models.Film"%>
 <%@ page pageEncoding="UTF-8" %>
 <header>
   <div class="navbar navbar-default navbar-fixed-top">
@@ -12,18 +13,13 @@
       </div>
       <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Link</a></li>
+          <li class="active"><a href="#"><i class="fa fa-fw fa-film"></i> Film</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-cubes"></i> Genere <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li class="dropdown-header">Dropdown header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
+              <% for(String genre : Film.getGenres()){ %>
+                <li><a href="#"><%= genre %></a></li>
+              <% } %>
             </ul>
           </li>
         </ul>
