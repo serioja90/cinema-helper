@@ -20,7 +20,7 @@ import utilities.Logger;
             urlPatterns = {
                             "/films",
                             "/films/index",
-                            "/films/hello"
+                            "/films/genre"
                           })
 public class FilmsController extends ApplicationController {
   
@@ -34,6 +34,19 @@ public class FilmsController extends ApplicationController {
       request.setAttribute("films", Film.getFilmsList());
     }catch(Exception ex){
       Logger.reportException(ex);
+      request.setAttribute("error", ex);
+    }
+  }
+  
+  public void genre(HttpServletRequest request, HttpServletResponse response){
+    try{
+      String genre = request.getParameter("genre");
+      Film[] films = Film.getFilmsByGenre(genre);
+      request.setAttribute("genre", genre);
+      request.setAttribute("films", films);
+    }catch(Exception ex){
+      Logger.reportException(ex);
+      request.setAttribute("error", ex);
     }
   }
 }

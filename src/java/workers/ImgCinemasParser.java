@@ -128,7 +128,10 @@ public class ImgCinemasParser implements Runnable{
   private String getGenre(Document document){
     String genre = null;
     Element e = document.select("div#scheda .filmDescription p:contains(Genere) span").first();
-    if(e != null) genre = e.text();
+    if(e != null){
+      genre = e.text();
+      if(genre.toLowerCase().equals("action")) genre = "Azione";
+    }
     return genre;
   }
   

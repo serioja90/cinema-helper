@@ -22,6 +22,8 @@ import utilities.Logger;
  * @author sergiu
  */
 public class ApplicationController extends HttpServlet {
+  
+  public static final String HOME = "films/index";
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

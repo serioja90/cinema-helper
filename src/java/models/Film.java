@@ -66,4 +66,14 @@ public class Film extends Model{
     result = genres.toArray(result);
     return result;
   }
+  
+  public static Film[] getFilmsByGenre(String genre){
+    Film[] films = new Film[]{};
+    Map<String,String[]> params = new HashMap<>();
+    params.put("select", new String[]{"*"});
+    params.put("where", new String[]{"genre = ?"});
+    params.put("params", new String[]{genre});
+    films = new Film().find(params).toArray(films);
+    return films;
+  }
 }

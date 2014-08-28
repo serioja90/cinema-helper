@@ -40,11 +40,14 @@ will update database infromation about films.</description>
             30
         </session-timeout>
     </session-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
     <jsp-config>
         <jsp-property-group>
             <description>header and footer settings</description>
             <url-pattern>/WEB-INF/views/*</url-pattern>
-            <url-pattern>/index.jsp</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>

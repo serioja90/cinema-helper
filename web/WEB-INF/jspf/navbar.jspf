@@ -1,5 +1,9 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="controllers.ApplicationController"%>
 <%@page import="models.Film"%>
 <%@ page pageEncoding="UTF-8" %>
+<% String controller = request.getAttribute("controller").toString(); %>
+<% String action = request.getAttribute("action").toString(); %>
 <header>
   <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -9,16 +13,28 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Cinema Helper</a>
+        <a class="navbar-brand" href="<%= request.getContextPath() %>/<%= ApplicationController.HOME %>">
+          Cinema Helper
+        </a>
       </div>
       <div class="navbar-collapse collapse navbar-responsive-collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#"><i class="fa fa-fw fa-film"></i> Film</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-cubes"></i> Genere <b class="caret"></b></a>
+          <li class="<%= controller.equals("films") && action.equals("index") ? "active" : "" %>">
+            <a href="<%= request.getContextPath() %>/<%= ApplicationController.HOME %>">
+              <i class="fa fa-fw fa-film"></i> Film
+            </a>
+          </li>
+          <li class="dropdown <%= controller.equals("films") && action.equals("genre") ? "active" : "" %>">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-fw fa-cubes"></i> Genere <b class="caret"></b>
+            </a>
             <ul class="dropdown-menu">
               <% for(String genre : Film.getGenres()){ %>
-                <li><a href="#"><%= genre %></a></li>
+              <li class="<%= genre.equals(request.getAttribute("genre")) ? "active" : "" %>">
+                <a href="<%= request.getContextPath() %>/films/genre?genre=<%= URLEncoder.encode(genre, "UtF-8") %>">
+                  <%= genre %>
+                </a>
+              </li>
               <% } %>
             </ul>
           </li>
