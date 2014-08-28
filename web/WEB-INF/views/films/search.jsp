@@ -6,5 +6,6 @@
       <h1 class="col-lg-12">Risultati per <small>"<%= request.getAttribute("query") %>"</small></h1>
     </div>
   </div>
+  <%@include file="../../jspf/messages.jspf" %>
   <%@include file="_films_list.jsp" %>
 </div>

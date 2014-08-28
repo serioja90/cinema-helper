@@ -7,6 +7,7 @@ CREATE TABLE users (
   id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1) PRIMARY KEY,
   username VARCHAR(30) NOT NULL,
   email VARCHAR(255) NOT NULL,
+  password VARCHAR(50) NOT NULL,
   surname VARCHAR(255),
   name VARCHAR(255),
   role_id INT NOT NULL
@@ -37,3 +38,5 @@ CREATE TABLE schedule (
   film_id INTEGER NOT NULL,
   schedule TIMESTAMP NOT NULL
 );
+
+INSERT INTO roles (name) VALUES ('Admin'),('User');

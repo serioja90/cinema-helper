@@ -1,9 +1,11 @@
+<%@page import="models.User"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="controllers.ApplicationController"%>
 <%@page import="models.Film"%>
 <%@ page pageEncoding="UTF-8" %>
 <% String controller = request.getAttribute("controller").toString(); %>
 <% String action = request.getAttribute("action").toString(); %>
+<% User user = (User)request.getSession().getAttribute("user"); %>
 <header>
   <div class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -44,8 +46,29 @@
                  value="<%= request.getAttribute("query") == null ? "" : request.getAttribute("query") %>">
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Login</a></li>
-          <li><a href="#">Registrazione</a></li>
+          <% if(user == null){ %>
+            <li class="<%= controller.equals("users") && action.equals("login") ? "active" : "" %>">
+              <a href="<%= request.getContextPath() %>/users/login">
+                <i class="fa fa-fw fa-lock"></i> Login
+              </a>
+            </li class="<%= controller.equals("users") && action.equals("registration") ? "active" : "" %>">
+            <li>
+              <a href="<%= request.getContextPath() %>/users/registration">
+                <i class="fa fa-fw fa-magic"></i> Registrazione
+              </a>
+            </li>
+          <% } else { %>
+            <li class="<%= controller.equals("users") && action.equals("index") ? "active" : "" %>">
+              <a href="<%= request.getContextPath() %>/users/index">
+                <i class="fa fa-fw fa-user"></i> Profilo
+              </a>
+            </li>
+            <li>
+              <a href="<%= request.getContextPath() %>/users/logout">
+                <i class="fa fa-fw fa-power-off"></i> Esci
+              </a>
+            </li>
+          <% } %>
         </ul>
       </div>
     </div>

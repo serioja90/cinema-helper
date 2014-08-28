@@ -1,0 +1,14 @@
+<%@ page pageEncoding="UTF-8" %>
+<% String[] errors = (String[])request.getAttribute("errors"); %>
+<% if(errors != null){ %>
+  <div class="alert alert-danger" role="alert">
+    <button type="button" class="close" data-dismiss="alert">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <ul>
+      <% for(String msg : errors){ %>
+        <li><%= msg %></li>
+      <% } %>
+    </ul>
+  </div>
+<% } %>

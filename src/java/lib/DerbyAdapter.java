@@ -112,7 +112,8 @@ public class DerbyAdapter extends DatabaseAdapter {
       for(int i=0; i < args.length; i++){
         statement.setString(i + 1, args[i]);
       }
-      result = statement.execute();
+      statement.execute();
+      result = true;
     } catch (SQLException ex) {
       Logger.reportException(ex);
     }

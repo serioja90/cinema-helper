@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,9 +31,11 @@ public abstract class Model {
   protected boolean loaded;
   private DatabaseConnection connection;
   protected Map<String,String> properties;
+  protected ArrayList<String> errors;
   
   public Model(){
     properties = new HashMap<>();
+    errors = new ArrayList();
     loaded = false;
   }
   
@@ -162,6 +165,12 @@ public abstract class Model {
     }
     return this;
   }
+  
+  public Model addErrors(String... messages){
+    errors.addAll(Arrays.asList(messages));
+    return this;
+  }
+  public String[] getErrors(){ return errors.toArray(new String[]{}); }
   
   protected String join(String[] args, String joinChar){
     return Tools.join(args, joinChar);

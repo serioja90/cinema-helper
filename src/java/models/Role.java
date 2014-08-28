@@ -6,6 +6,9 @@
 
 package models;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import lib.Model;
 
 /**
@@ -18,5 +21,19 @@ public class Role extends Model{
     super();
     tableName = "roles";
     id = "id";
+  }
+  
+  public static Role[] getRoles(){
+    return new Role().all().toArray(new Role[]{});
+  }
+  
+  public static Role getByName(String name){
+    ArrayList<Model> result = null;
+    Map<String,String[]> params = new HashMap<>();
+    params.put("select", new String[]{"*"});
+    params.put("where", new String[]{"name = ?"});
+    params.put("params", new String[]{name});
+    result = new Role().find(params);
+    return (Role)(result == null || result.isEmpty() ? null : result.get(0));
   }
 }

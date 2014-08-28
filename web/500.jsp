@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page isErrorPage="true" import="java.io.*"%>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,6 +21,7 @@
     <div class="container text-center text-primary">
       <h1 style="font-size: 5em; font-weight: bolder;">500</h1>
       <h3>Errore interno del server</h3>
+      <p><%= exception.toString() %></p>
       <hr>
       <h4>
         La pagina non può essere servita a causa di errori interni del server.

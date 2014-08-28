@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import utilities.Logger;
 
 /**
@@ -42,6 +43,8 @@ public class ApplicationController extends HttpServlet {
     String[] parts = request.getServletPath().split("/");
     String controller = parts[1];
     String action = (parts.length >= 3 ? parts[2] : "index");
+    HttpSession session = request.getSession();
+    if(session == null) request.getSession(true);
     Logger.info(method + " " + url + (query == null ? "" : "?" + query) + " from " + ip);
     request.setAttribute("jsp-path", "/WEB-INF/views/" + controller +  "/" + action );
     request.setAttribute("controller", controller);
@@ -60,19 +63,22 @@ public class ApplicationController extends HttpServlet {
    * @param response servlet response
    */
   protected void forwardRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String path = (String)request.getAttribute("jsp-path");
+    String path = (String)request.getAttribute("jsp-path");;
     String controller = (String)request.getAttribute("controller");
     String action = (String)request.getAttribute("action");
-    path += ".jsp";
     try{
       try{
         Method method = this.getClass().getMethod(action, HttpServletRequest.class, HttpServletResponse.class);
         method.invoke(this, request, response);
+        path = (String)request.getAttribute("jsp-path");
       }catch(NoSuchMethodException ex){
         Logger.warn(controller + "#" + action + " not found!");
       }
-      Logger.info("Responding with " + path);
-      request.getRequestDispatcher(path).forward(request, response);
+      if(!response.isCommitted()){
+        path += ".jsp";
+        Logger.info("Responding with " + path);
+        request.getRequestDispatcher(path).forward(request, response);
+      }
     }catch(ServletException ex){
       Logger.reportException(ex);
       response.sendError(HttpServletResponse.SC_NOT_FOUND, ex.toString());
