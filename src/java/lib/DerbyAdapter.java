@@ -87,11 +87,7 @@ public class DerbyAdapter extends DatabaseAdapter {
       statement = connection.prepareStatement(sql);
       if(args != null){
         for(int i=0; i < args.length; i++){
-          if(args[i] == null){
-            statement.setNull(i + 1, java.sql.Types.NULL);
-          }else{
-            statement.setString(i + 1, args[i]);
-          }
+          statement.setString(i + 1, args[i] == null ? "" : args[i]);
         }
       }
       result = statement.executeQuery();

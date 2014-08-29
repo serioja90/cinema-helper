@@ -77,9 +77,9 @@ public class Schedule extends Model {
   public static Schedule[] getByFilmId(String filmId){
     Map<String,String[]> params = new HashMap<>();
     params.put("select", new String[]{"*"});
-    params.put("where", new String[]{"film_id = ?"});
+    params.put("where", new String[]{"film_id = ? AND schedule >= ?"});
     params.put("order", new String[]{"schedule"});
-    params.put("params", new String[]{filmId});
+    params.put("params", new String[]{filmId, Tools.getTimestamp()});
     return new Schedule().find(params).toArray(new Schedule[]{});
   }
   

@@ -51,8 +51,8 @@
               <a href="<%= request.getContextPath() %>/users/login">
                 <i class="fa fa-fw fa-lock"></i> Login
               </a>
-            </li class="<%= controller.equals("users") && action.equals("registration") ? "active" : "" %>">
-            <li>
+            </li>
+            <li class="<%= controller.equals("users") && action.equals("registration") ? "active" : "" %>">
               <a href="<%= request.getContextPath() %>/users/registration">
                 <i class="fa fa-fw fa-magic"></i> Registrazione
               </a>

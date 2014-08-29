@@ -49,9 +49,13 @@ public class Film extends Model{
   }
   
   public static Film[] getFilmsList(){
-    Film[] films = new Film[]{};
-    films = new Film().all().toArray(films);
-    return films;
+    Map<String,String[]> params = new HashMap<>();
+    String[] filmsIds = Schedule.getActiveFilmsIds();
+    params.put("select", new String[]{"*"});
+    params.put("where", new String[]{"id IN (" + Tools.join(Tools.space("?", filmsIds.length),", " ) + ")"});
+    params.put("params", filmsIds);
+    params.put("order", new String[]{"title", "tecnology"});
+    return new Film().find(params).toArray(new Film[]{});
   }
   
   public static String[] getGenres(){
