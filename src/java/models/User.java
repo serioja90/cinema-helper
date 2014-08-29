@@ -54,4 +54,8 @@ public class User extends Model{
     result = new User().find(params);
     return (User)(result == null || result.isEmpty() ? null : result.get(0));
   }
+  
+  public Role getRole(){
+    return (Role)(new Role().find(this.get("role_id")));
+  }
 }

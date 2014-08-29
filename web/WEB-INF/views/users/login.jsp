@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<% String email = request.getParameter("email"); %>
 <div class="container">
   <div class="page-header">
     <div class="row">
@@ -9,7 +10,8 @@
   <form role="form" method="POST" class="col-xs-4 col-xs-offset-4" action="<%= request.getContextPath() %>/users/authenticate">
     <div class="form-group">
       <label for="email">Indirizzo email</label>
-      <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+      <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+             value="<%= email == null ? "" : email %>">
     </div>
     <div class="form-group">
       <label for="password">Password</label>

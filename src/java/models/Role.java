@@ -36,4 +36,6 @@ public class Role extends Model{
     result = new Role().find(params);
     return (Role)(result == null || result.isEmpty() ? null : result.get(0));
   }
+  
+  public String toString(){ return this.get("name"); }
 }
