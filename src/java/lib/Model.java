@@ -148,6 +148,8 @@ public abstract class Model {
     return properties.get(field); 
   }
   
+  public Map<String,String> getProperties(){ return this.properties; }
+  
   public Model set(String field, String value){ 
     properties.put(field, value);
     return this;
